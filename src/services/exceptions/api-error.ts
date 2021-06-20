@@ -1,6 +1,6 @@
-import { Result, ValidationError } from 'express-validator'
+import { ValidationError } from 'express-validator'
 
-type TErrors = Error[] | Result<ValidationError>
+type TErrors = Error[] | ValidationError[]
 
 export default class ApiError extends Error {
   constructor(public status: number, message: string, public errors: TErrors = []) {

@@ -11,7 +11,7 @@ import wsHandler from './ws-handlers'
 
 const app = express()
 const server = createServer(app)
-const wss = new WebSocket.Server({ server })
+const wsServer = new WebSocket.Server({ server })
 
 app.use(express.json())
 app.use(cors())
@@ -25,7 +25,7 @@ const start = async () => {
       useUnifiedTopology: true,
     })
 
-    wss.on('connection', wsHandler)
+    wsServer.on('connection', wsHandler(wsServer))
 
     server.listen(PORT, () => console.log(`Server started on port ${PORT}`))
   } catch (e) {
