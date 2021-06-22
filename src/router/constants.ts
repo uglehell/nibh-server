@@ -4,7 +4,7 @@ export enum EPaths {
   login = '/login',
   registration = '/registration',
   getUser = '/get-user',
-  home = '/home',
+  home = '/',
   chat = '/chat',
   users = '/users',
 }
