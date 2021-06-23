@@ -3,24 +3,15 @@ import UserModel, { IUser } from '../models/user-model'
 import ApiError from '../services/exceptions/api-error'
 import { loginValidation } from '../utils/loginValidation'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import { generateAccessToken } from '../utils/generateAccessToken'
-import UserDto from '../dtos/user-dto'
 
 interface ILoginRequest {
   username: string
   password: string
 }
 
-interface IDecodedToken {
-  username: string
-  id: string
-  iat: number
-  exp: number
-}
-
 class AuthController {
-  async login(req: Request, res: Response, next: NextFunction) {
+  login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       loginValidation(req)
 
@@ -34,7 +25,7 @@ class AuthController {
       const isPasswordValid = bcrypt.compareSync(password, user.password)
 
       if (!isPasswordValid) {
-        throw ApiError.BadRequest(`Wrong password`)
+        throw ApiError.BadRequest('Wrong password')
       }
 
       const accessToken = generateAccessToken(user._id, username)
@@ -44,7 +35,7 @@ class AuthController {
     }
   }
 
-  async registration(req: Request, res: Response, next: NextFunction) {
+  registration = async (req: Request, res: Response, next: NextFunction) => {
     try {
       loginValidation(req)
 
@@ -60,20 +51,6 @@ class AuthController {
       await user.save()
 
       return res.json({ message: 'User registered successfully' })
-    } catch (e) {
-      next(e)
-    }
-  }
-
-  async getUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      const accessToken = req.headers.authorization as string
-      const jwtPayload = jwt.decode(accessToken) as IDecodedToken
-      const username = jwtPayload.username
-
-      const user = await UserModel.findOne({ username }) as IUser
-
-      return res.json(new UserDto(user))
     } catch (e) {
       next(e)
     }

@@ -6,7 +6,7 @@ export enum EPaths {
   getUser = '/get-user',
   home = '/',
   chat = '/chat',
-  users = '/users',
+  getAppData = '/get-app-data',
 }
 
 export const loginValidationRules = [

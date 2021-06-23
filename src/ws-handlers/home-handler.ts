@@ -1,3 +1,12 @@
-import { Server } from "ws";
+import WebSocket from "ws";
+import { TWsMessage } from "./types";
 
-export default (ws: WebSocket, wsServer: Server) => {}
+export default class HomeHandler {
+  constructor(private wsServer: WebSocket.Server) {}
+
+  onMessage = async (message: TWsMessage) => {
+    switch (message.type) {
+      
+    }
+  }
+}

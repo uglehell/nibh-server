@@ -5,7 +5,6 @@ export default (error: ApiError, req: Request, res: Response, next: NextFunction
   console.log(error)
 
   if (error?.status) {
-    console.log(error)
     return res.status(error.status).json({ message: error.message, errors: error.errors })
   }
 
