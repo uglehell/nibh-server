@@ -36,8 +36,12 @@ class AppController {
 
   getAppData = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const counter = {
+        value: 0,
+        lastClick: '',
+      }
 
-      return res.json({ messages: [], counterValue: 0 })
+      return res.json({ messages: [], counter })
     } catch (e) {
       next(e)
     }

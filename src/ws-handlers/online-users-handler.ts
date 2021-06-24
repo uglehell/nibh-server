@@ -4,9 +4,9 @@ import { sendToClients } from '../services/ws-service/sendToClients'
 import { EWsMessageTypes, TWsMessage } from './types'
 
 export default class OnlineUsersHandler {
-  private username: string = ''
+  private username = ''
 
-  constructor(private wsServer: WebSocket.Server) {}
+  constructor(private wsServer: WebSocket.Server, private ws: WebSocket) {}
 
   onMessage = async (message: TWsMessage) => {
     switch (message.type) {
@@ -25,11 +25,11 @@ export default class OnlineUsersHandler {
     sendToClients(this.wsServer, response)
   }
 
-  onClose = async (event: CloseEvent) => {
-    await this.onCloseOrError()
+  onClose = () => {
+    this.onCloseOrError()
   }
 
-  onError = async (event: Event) => {
-    await this.onCloseOrError()
+  onError = async (event: Error) => {
+    this.onCloseOrError()
   }
 }

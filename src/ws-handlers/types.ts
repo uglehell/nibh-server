@@ -1,16 +1,41 @@
+import { ObjectId } from "mongoose"
+
 export enum EWsMessageTypes {
   openMessage = 'open_message',
-  onlineUsersUpdate = 'online_users_update'
+  homeClickMessage = 'home_click_message',
 }
 
-export interface IOpenMessage {
+interface IOpenMessage {
   type: EWsMessageTypes.openMessage
   username: string
 }
 
-export interface IOnlineUsersUpdateMessage {
-  type: EWsMessageTypes.onlineUsersUpdate,
-  onlineUsers: string[]
+interface IHomeClickMessage {
+  type: EWsMessageTypes.homeClickMessage
+  lastClick: string
 }
 
-export type TWsMessage = IOpenMessage | IOnlineUsersUpdateMessage
+export type TWsMessage = IOpenMessage | IHomeClickMessage
+
+interface IOnlineUser {
+  username: string,
+  id: ObjectId
+}
+
+export interface IOnlineUsersUpdateMessage {
+  type: EWsRequestTypes.onlineUsersUpdate
+  onlineUsers: IOnlineUser[]
+}
+
+export enum EWsRequestTypes {
+  homeMessage = 'home_message',
+  onlineUsersUpdate = 'online_users_update',
+}
+
+export interface IHomeMessage {
+  type: EWsRequestTypes.homeMessage
+  counter: number
+  lastClick: string
+}
+
+export type TWsRequest = IHomeMessage | IOnlineUsersUpdateMessage

@@ -1,7 +1,7 @@
 import { Document } from 'mongoose'
 import UserModel, { IUser } from '../../models/user-model'
 import { generateOnlineUsersList } from '../../utils/generateOnlineUsersList'
-import { EWsMessageTypes, IOnlineUsersUpdateMessage } from '../../ws-handlers/types'
+import { EWsRequestTypes, IOnlineUsersUpdateMessage } from '../../ws-handlers/types'
 
 export const getUpdatedOnlineUsers = async (
   username: string,
@@ -14,5 +14,5 @@ export const getUpdatedOnlineUsers = async (
   const onlineUsers = (await UserModel.find({ isOnline: true })) as IUser[]
   const usernamesList = generateOnlineUsersList(onlineUsers)
 
-  return { type: EWsMessageTypes.onlineUsersUpdate, onlineUsers: usernamesList }
+  return { type: EWsRequestTypes.onlineUsersUpdate, onlineUsers: usernamesList }
 }
