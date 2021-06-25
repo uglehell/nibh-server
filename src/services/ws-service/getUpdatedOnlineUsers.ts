@@ -1,13 +1,15 @@
-import { Document } from 'mongoose'
+import { Document, Types } from 'mongoose'
 import UserModel, { IUser } from '../../models/user-model'
 import { generateOnlineUsersList } from '../../utils/generateOnlineUsersList'
 import { EWsRequestTypes, IOnlineUsersUpdateMessage } from '../../ws-handlers/types'
 
 export const getUpdatedOnlineUsers = async (
-  username: string,
+  id: string,
   isOnline: boolean
 ): Promise<IOnlineUsersUpdateMessage> => {
-  const user = (await UserModel.findOne({ username })) as Document & IUser
+  const userId = new Types.ObjectId(id)
+
+  const user = (await UserModel.findById(userId)) as Document & IUser
   user.isOnline = isOnline
   await user.save()
 

@@ -4,23 +4,23 @@ import { sendToClients } from '../services/ws-service/sendToClients'
 import { EWsMessageTypes, TWsMessage } from './types'
 
 export default class OnlineUsersHandler {
-  private username = ''
+  private id = ''
 
   constructor(private wsServer: WebSocket.Server, private ws: WebSocket) {}
 
   onMessage = async (message: TWsMessage) => {
     switch (message.type) {
       case EWsMessageTypes.openMessage:
-        this.username = message.username
+        this.id = message.id
 
-        const response = await getUpdatedOnlineUsers(message.username, true)
+        const response = await getUpdatedOnlineUsers(message.id, true)
 
         sendToClients(this.wsServer, response)
     }
   }
 
   private onCloseOrError = async () => {
-    const response = await getUpdatedOnlineUsers(this.username, false)
+    const response = await getUpdatedOnlineUsers(this.id, false)
 
     sendToClients(this.wsServer, response)
   }

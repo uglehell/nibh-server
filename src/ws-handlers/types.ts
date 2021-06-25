@@ -1,13 +1,14 @@
-import { ObjectId } from "mongoose"
+import { ObjectId } from 'mongoose'
 
 export enum EWsMessageTypes {
   openMessage = 'open_message',
   homeClickMessage = 'home_click_message',
+  newReceivedMessage = 'new_message',
 }
 
 interface IOpenMessage {
   type: EWsMessageTypes.openMessage
-  username: string
+  id: string
 }
 
 interface IHomeClickMessage {
@@ -15,10 +16,22 @@ interface IHomeClickMessage {
   lastClick: string
 }
 
-export type TWsMessage = IOpenMessage | IHomeClickMessage
+interface IReceivedMessage {
+  type: EWsMessageTypes.newReceivedMessage
+  author: string
+  text: string
+}
+
+export type TWsMessage = IOpenMessage | IHomeClickMessage | IReceivedMessage
+
+export enum EWsRequestTypes {
+  homeMessage = 'home_message',
+  onlineUsersUpdate = 'online_users_update',
+  newSendingMessage = 'new_message',
+}
 
 interface IOnlineUser {
-  username: string,
+  username: string
   id: ObjectId
 }
 
@@ -27,9 +40,12 @@ export interface IOnlineUsersUpdateMessage {
   onlineUsers: IOnlineUser[]
 }
 
-export enum EWsRequestTypes {
-  homeMessage = 'home_message',
-  onlineUsersUpdate = 'online_users_update',
+export interface ISendingMessage {
+  type: EWsRequestTypes.newSendingMessage
+  author: string
+  text: string
+  createdAt: string
+  id: string
 }
 
 export interface IHomeMessage {
@@ -38,4 +54,4 @@ export interface IHomeMessage {
   lastClick: string
 }
 
-export type TWsRequest = IHomeMessage | IOnlineUsersUpdateMessage
+export type TWsRequest = IHomeMessage | IOnlineUsersUpdateMessage | ISendingMessage

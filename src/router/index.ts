@@ -11,6 +11,6 @@ router.post(EPaths.registration, loginValidationRules, authController.registrati
 
 router.get(EPaths.getUser, appController.getUser)
 
-router.get(EPaths.getAppData, appController.getAppData)
+router.get(EPaths.getMessages, appController.getMessages)
 
 export default router

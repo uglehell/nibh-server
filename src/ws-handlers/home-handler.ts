@@ -16,7 +16,7 @@ export default class HomeHandler {
         const response: IHomeMessage = {
           type: EWsRequestTypes.homeMessage,
           counter: ++this.counter,
-          lastClick: this.lastClick
+          lastClick: this.lastClick,
         }
 
         sendToClients(this.wsServer, response)

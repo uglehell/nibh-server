@@ -1,32 +1,16 @@
 import { NextFunction, Request, Response } from 'express'
 import UserModel, { IUser } from '../models/user-model'
-import ApiError from '../services/exceptions/api-error'
-import jwt from 'jsonwebtoken'
 import UserDto from '../dtos/user-dto'
-
-interface IDecodedToken {
-  username: string
-  id: string
-  iat: number
-  exp: number
-}
+import { getAccessTokenPayload } from '../utils/getAccessTokenPayload'
+import MessageModel, { IMessage } from '../models/message-model'
+import MessageDto from '../dtos/message-dto'
 
 class AppController {
   getUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const accessToken = req.headers.authorization?.split(' ')[1]
-      if (!accessToken) {
-        throw ApiError.UnauthorizedError()
-      }
+      const { id } = getAccessTokenPayload(req)
 
-      const jwtPayload = jwt.decode(accessToken) as IDecodedToken
-      if (!jwtPayload) {
-        throw ApiError.UnauthorizedError()
-      }
-
-      const username = jwtPayload.username
-
-      const user = (await UserModel.findOne({ username })) as IUser
+      const user = (await UserModel.findById(id)) as IUser
 
       return res.json(new UserDto(user))
     } catch (e) {
@@ -34,14 +18,13 @@ class AppController {
     }
   }
 
-  getAppData = async (req: Request, res: Response, next: NextFunction) => {
+  getMessages = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const counter = {
-        value: 0,
-        lastClick: '',
-      }
+      const messages = (await MessageModel.find()) as IMessage[]
 
-      return res.json({ messages: [], counter })
+      return res.json({
+        messages: messages.map((message) => new MessageDto(message)),
+      })
     } catch (e) {
       next(e)
     }
