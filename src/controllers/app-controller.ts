@@ -4,6 +4,12 @@ import UserDto from '../dtos/user-dto'
 import { getAccessTokenPayload } from '../utils/getAccessTokenPayload'
 import MessageModel, { IMessage } from '../models/message-model'
 import MessageDto from '../dtos/message-dto'
+import { Document } from 'mongoose'
+import { requestValidation } from '../utils/loginValidation'
+
+interface IChangeUsernameRequest {
+  newUsername: string
+}
 
 class AppController {
   getUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,6 +31,23 @@ class AppController {
       return res.json({
         messages: messages.map((message) => new MessageDto(message)),
       })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  changeUsername = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      requestValidation(req)
+
+      const { id } = getAccessTokenPayload(req)
+      const user = (await UserModel.findById(id)) as IUser & Document
+
+      const { newUsername } = req.body as IChangeUsernameRequest
+      user.username = newUsername
+
+      await user.save()
+      return res.json({ newUsername, message: 'Username changed successfully' })
     } catch (e) {
       next(e)
     }

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import UserModel, { IUser } from '../models/user-model'
 import ApiError from '../services/exceptions/api-error'
-import { loginValidation } from '../utils/loginValidation'
+import { requestValidation } from '../utils/loginValidation'
 import bcrypt from 'bcrypt'
 import { generateAccessToken } from '../utils/generateAccessToken'
 
@@ -13,7 +13,7 @@ interface ILoginRequest {
 class AuthController {
   login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      loginValidation(req)
+      requestValidation(req)
 
       const { username, password } = req.body as ILoginRequest
       const user = (await UserModel.findOne({ username })) as IUser
@@ -37,7 +37,7 @@ class AuthController {
 
   registration = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      loginValidation(req)
+      requestValidation(req)
 
       const { username, password } = req.body as ILoginRequest
       const candidate = (await UserModel.findOne({ username })) as IUser

@@ -1,1 +1,1 @@
-export const MAX_MESSAGES_COUNT = 100
+export const MAX_MESSAGES_COUNT = 50

@@ -10,7 +10,7 @@ export const getAccessTokenPayload = (req: Request): IAccessTokenPayload => {
   }
 
   const payload = jwt.decode(accessToken) as IAccessTokenPayload | null
-  if (!payload) {
+  if (!payload || !payload.id) {
     throw ApiError.UnauthorizedError()
   }
 
