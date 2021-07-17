@@ -19,7 +19,7 @@ class AuthController {
       const user = (await UserModel.findOne({ username })) as IUser
 
       if (!user) {
-        throw ApiError.BadRequest(`User ${username} not founded`)
+        throw ApiError.BadRequest(`User not founded`)
       }
 
       const isPasswordValid = bcrypt.compareSync(password, user.password)
