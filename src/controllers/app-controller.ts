@@ -6,6 +6,7 @@ import MessageModel, { IMessage } from '../models/message-model'
 import MessageDto from '../dtos/message-dto'
 import { Document } from 'mongoose'
 import { requestValidation } from '../utils/loginValidation'
+import ApiError from '../services/exceptions/api-error'
 
 interface IChangeUsernameRequest {
   newUsername: string
@@ -44,6 +45,12 @@ class AppController {
       const user = (await UserModel.findById(id)) as IUser & Document
 
       const { newUsername } = req.body as IChangeUsernameRequest
+      const candidate = (await UserModel.findOne({ username: newUsername })) as IUser
+
+      if (candidate) {
+        throw ApiError.BadRequest('Username is already taken')
+      }
+
       user.username = newUsername
 
       await user.save()
