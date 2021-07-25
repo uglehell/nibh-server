@@ -15,6 +15,7 @@ export const handleNewMessage = async (wsServer: Server, messageData: INewMessag
   await message.save()
 
   const messageEvent: ISendingMessage = {
+    authorId: message.authorId,
     type: EWsRequestTypes.newSendingMessage,
     author: messageData.author,
     text: messageData.text,

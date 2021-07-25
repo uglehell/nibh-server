@@ -1,22 +1,21 @@
-import WebSocket, { OpenEvent } from 'ws'
+import WebSocket from 'ws'
+import counterData from '../services/counterData/counterData'
 import { sendToClients } from '../services/ws-service/sendToClients'
 import { EWsMessageTypes, EWsRequestTypes, IHomeMessage, TWsMessage } from './types'
 
 export default class HomeHandler {
-  private counter = 0
-  private lastClick = ''
-
   constructor(private wsServer: WebSocket.Server, private ws: WebSocket) {}
 
   onMessage = async (message: TWsMessage) => {
     switch (message.type) {
       case EWsMessageTypes.homeClickMessage:
-        this.lastClick = message.lastClick
+        counterData.setCounter(counterData.counter + 1)
+        counterData.setLastClick(message.lastClick)
 
         const response: IHomeMessage = {
           type: EWsRequestTypes.homeMessage,
-          counter: ++this.counter,
-          lastClick: this.lastClick,
+          counter: counterData.counter,
+          lastClick: counterData.lastClick,
         }
 
         sendToClients(this.wsServer, response)
@@ -26,8 +25,8 @@ export default class HomeHandler {
   onOpen = () => {
     const message: IHomeMessage = {
       type: EWsRequestTypes.homeMessage,
-      counter: this.counter,
-      lastClick: this.lastClick,
+      counter: counterData.counter,
+      lastClick: counterData.lastClick,
     }
 
     this.ws.send(JSON.stringify(message))

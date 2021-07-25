@@ -6,11 +6,13 @@ export default class MessageDto {
   author: string
   text: string
   createdAt: string
+  authorId: Schema.Types.ObjectId
 
-  constructor({ _id, author, text, createdAt }: IMessage) {
+  constructor({ _id, author, text, createdAt, authorId }: IMessage) {
     this.id = _id
     this.author = author
     this.text = text
     this.createdAt = createdAt
+    this.authorId = authorId
   }
 }

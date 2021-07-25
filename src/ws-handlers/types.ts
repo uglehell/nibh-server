@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongoose'
+import { ObjectId, Schema } from 'mongoose'
 
 export enum EWsMessageTypes {
   openMessage = 'open_message',
@@ -41,6 +41,7 @@ export interface IOnlineUsersUpdateMessage {
 }
 
 export interface ISendingMessage {
+  authorId: Schema.Types.ObjectId
   type: EWsRequestTypes.newSendingMessage
   author: string
   text: string

@@ -20,9 +20,9 @@ export default class OnlineUsersHandler {
   }
 
   private onCloseOrError = async () => {
-    const response = await getUpdatedOnlineUsers(this.id, false)
+    // const response = await getUpdatedOnlineUsers(this.id, false)
 
-    sendToClients(this.wsServer, response)
+    // sendToClients(this.wsServer, response)
   }
 
   onClose = () => {
