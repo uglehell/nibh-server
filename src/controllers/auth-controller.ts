@@ -29,7 +29,7 @@ class AuthController {
       }
 
       const accessToken = generateAccessToken(user._id, username)
-      return res.json({ accessToken })
+      return res.json({ accessToken, id: user._id })
     } catch (e) {
       next(e)
     }
